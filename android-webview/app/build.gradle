@@ -1,0 +1,44 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'uz.unutilmastam.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "uz.unutilmastam.app"
+        minSdk 23              // Android 6.0 va yuqorisi
+        targetSdk 34
+        versionCode 1          // Har yangi versiyada 1 ga oshiring
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            // Qiymatlar GitHub Secrets'dan keladi (workflow ichida beriladi)
+            def ksFile = System.getenv("KEYSTORE_FILE")
+            if (ksFile != null) {
+                storeFile file(ksFile)
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.activity:activity:1.9.2'
+}
